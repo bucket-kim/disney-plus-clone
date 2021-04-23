@@ -1,7 +1,43 @@
 import styled from "styled-components";
 
-const Home = () => {
-  return <div>Home</div>;
+const Home = (props) => {
+  return (
+    <Container>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+      <h2>Hello</h2>
+    </Container>
+  );
 };
+
+const Container = styled.main`
+  position: relative;
+  min-height: calc(100vh - 250px);
+  overflow-x: hidden;
+  display: block;
+  top: 72px;
+  padding: calc(3.5vw + 5px);
+
+  &:after {
+    background: url("/images/home-background.png") center center / cover
+      no-repeat fixed;
+    content: "";
+    position: absolute;
+    opacity: 1;
+    z-index: -1;
+    inset: 0px;
+  }
+`;
 
 export default Home;

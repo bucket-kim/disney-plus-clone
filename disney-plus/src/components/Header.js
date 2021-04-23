@@ -6,6 +6,7 @@ import {
   selectUserName,
   selectUserPhoto,
   setUserLoginDetails,
+  setSignOutState,
 } from "../features/user/userSlice";
 import { useEffect } from "react";
 
@@ -24,6 +25,27 @@ const Header = (props) => {
     });
   }, [userName]);
 
+  const handleAuth = () => {
+    if (!userName) {
+      auth
+        .signInWithPopup(provider)
+        .then((res) => {
+          setUser(res.user);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    } else if (userName) {
+      auth
+        .signOut()
+        .then(() => {
+          dispatch(setSignOutState());
+          history.push("/");
+        })
+        .catch((err) => alert(err.message));
+    }
+  };
+
   const setUser = (user) => {
     dispatch(
       setUserLoginDetails({
@@ -32,17 +54,6 @@ const Header = (props) => {
         photo: user.photoURL,
       })
     );
-  };
-
-  const handleAuth = () => {
-    auth
-      .signInWithPopup(provider)
-      .then((res) => {
-        setUser(res.user);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
   };
 
   return (
@@ -70,7 +81,7 @@ const Header = (props) => {
             </a>
             <a>
               <img src="/images/original-icon.svg" alt="ORIGINALs" />
-              <span>ORIGINALs</span>
+              <span>ORIGINALS</span>
             </a>
             <a>
               <img src="/images/movie-icon.svg" alt="MOVIES" />
