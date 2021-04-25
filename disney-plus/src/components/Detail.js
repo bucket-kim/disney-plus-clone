@@ -1,14 +1,36 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import db from "../firebase";
+import { useParams } from "react-router-dom";
 
 const Detail = (props) => {
+  const { id } = useParams();
+  const [detail, setDetail] = useState({});
+
+  useEffect(() => {
+    db.collection("movies")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setDetail(doc.data());
+        } else {
+          console.log("No such doc in firebase");
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [id]);
+
   return (
     <Container>
       <Background>
-        <img src="" alt="" />
+        <img src={detail.backgroundImg} alt={detail.title} />
       </Background>
 
       <ImageTitle>
-        <img src="" alt="" />
+        <img src={detail.titleImg} alt={detail.title} />
       </ImageTitle>
 
       <ContentMeta>
@@ -31,8 +53,8 @@ const Detail = (props) => {
             </div>
           </GroupWatch>
         </Controls>
-        <SubTitle>Subtitle</SubTitle>
-        <Description>Description</Description>
+        <SubTitle>{detail.subTitle}</SubTitle>
+        <Description>{detail.description}</Description>
       </ContentMeta>
     </Container>
   );
@@ -44,7 +66,7 @@ const Container = styled.div`
   overflow-x: hidden;
   display: block;
   top: 72px;
-  padding: 0 calc(3.5vw + 5px) l;
+  padding: 0 calc(3.5vw + 5px);
 `;
 
 const Background = styled.div`
@@ -71,7 +93,7 @@ const ImageTitle = styled.div`
   -webkit-box-pack: start;
   justify-content: flex-start;
   margin: 0px auto;
-  height: 30vh;
+  height: 30vw;
   min-height: 170px;
   padding-bottom: 24px;
   width: 100%;
@@ -101,31 +123,27 @@ const Player = styled.button`
   padding: 0px 24px;
   height: 56px;
   border-radius: 4px;
-  align-items: center;
   cursor: pointer;
   display: flex;
+  align-items: center;
   justify-content: center;
   letter-spacing: 1.8px;
   text-align: center;
   text-transform: uppercase;
-  background: rgb(249, 249, 249);
+  background: rgb (249, 249, 249);
   border: none;
   color: rgb(0, 0, 0);
-
   img {
     width: 32px;
   }
-
   &:hover {
     background: rgb(198, 198, 198);
   }
-
   @media (max-width: 768px) {
     height: 45px;
     padding: 0px 12px;
     font-size: 12px;
     margin: 0px 10px 0px 0px;
-
     img {
       width: 25px;
     }
